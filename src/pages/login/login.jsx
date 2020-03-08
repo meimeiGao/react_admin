@@ -14,13 +14,25 @@ const Item = Form.Item
 
 
 /*登录的路由组件*/
-class Login extends Component {
+export default class Login extends Component {
  
   //提交表单
   onFinish = (event) => {
     console.log('要提交表单了',event)
   }
-  
+  validtatePwd = (rule, value, callback)=>{
+    if(!value){
+      callback('密码必须输入')
+    }else if(value.length<4){
+      callback('密码不能小于4位')
+    }else if(value.length>12){
+      callback('密码不能大于12位')
+    }else if(!(/^[a-zA-z0-9]+$/.test(value))){
+      callback('密码为输入字母、数字或下划线')
+    }else {
+      callback()
+    }
+  }
   render() {
     return (
       <div className='login'>
@@ -37,18 +49,19 @@ class Login extends Component {
                 className="login-form"
                 onFinish={this.onFinish}
                 initialValues={{
-                  username:'111',
-                  password:'563'
+                  username:'',
+                  password:''
                  
                 }}
               >
                 <Item
+                  validateFirst={true}
                   name="username"
                   rules={[
-                    {
-                      required: true,
-                      message: 'Please input your Username!',
-                    },
+                    {required: true, message: '请输入用户名',},
+                    {min: 4, message: '最小长度为4',},
+                    {max:12, message: '最大长度为12',},
+                    {pattern:/^[a-zA-z0-9]+$/, message: '用户为输入字母、数字或下划线',},
                   ]}
                 >
                   <Input prefix={<UserOutlined className="site-form-item-icon" style={{color: 'rgba(0,0,0,.25)'}}/>}
@@ -56,12 +69,11 @@ class Login extends Component {
                 </Item>
                 <Item
                   name="password"
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Please input your Password!',
-                    },
-                  ]}
+                  rules={
+                    [
+                      {validator:this.validtatePwd}
+                    ]
+                  }
                 >
                   <Input
                     prefix={<LockOutlined className="site-form-item-icon" style={{color: 'rgba(0,0,0,.25)'}}/>}
@@ -82,7 +94,7 @@ class Login extends Component {
     )
   }
 }
-export default Login
+
 
 /*
 1.
