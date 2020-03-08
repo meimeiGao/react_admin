@@ -20,19 +20,6 @@ export default class Login extends Component {
   onFinish = (event) => {
     console.log('要提交表单了',event)
   }
-  validtatePwd = (rule, value, callback)=>{
-    if(!value){
-      callback('密码必须输入')
-    }else if(value.length<4){
-      callback('密码不能小于4位')
-    }else if(value.length>12){
-      callback('密码不能大于12位')
-    }else if(!(/^[a-zA-z0-9]+$/.test(value))){
-      callback('密码为输入字母、数字或下划线')
-    }else {
-      callback()
-    }
-  }
   render() {
     return (
       <div className='login'>
@@ -71,7 +58,21 @@ export default class Login extends Component {
                   name="password"
                   rules={
                     [
-                      {validator:this.validtatePwd}
+                      () => ({
+                        validator(rule, value) {
+                          if(!value){
+                            return Promise.reject('密码必须输入')
+                          }else if(value.length<4){
+                            return Promise.reject('密码不能小于4位');
+                          }else if(value.length>12){
+                            return Promise.reject('密码不能大于12位')
+                          }else if(!(/^[a-zA-z0-9]+$/.test(value))){
+                            return Promise.reject('密码为输入字母、数字或下划线')
+                          }else{
+                            return Promise.resolve();
+                          }
+                        },
+                      }),
                     ]
                   }
                 >
