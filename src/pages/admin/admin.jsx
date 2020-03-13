@@ -10,6 +10,7 @@ import './admin.less'
 
 
 import LeftNav from '../../components/left-nav'
+import MyHeader from '../../components/header'
 import Home from '../home/home'
 import Category from '../category/category'
 import Product from '../product/product'
@@ -33,9 +34,11 @@ export default class Admin extends Component{
         <Sider>
           <LeftNav />
         </Sider>
-        <Layout>
-          <Header>Header</Header>
-          <Content>
+        <Layout className='content'>
+          <Header>
+            <MyHeader />
+          </Header>
+          <Content className='content-main'>
             <Switch>
               <Route path='/home' component={Home}></Route>
               <Route path='/category' component={Category}></Route>

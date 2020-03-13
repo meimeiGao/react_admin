@@ -32,7 +32,7 @@ export default class Login extends Component {
     const {username,password} = values
     //光标处在参数位置,在闪的时候,按住ctrl鼠标放在方法上面就可以看到需要传什么参数
     const result = await reqLogin(username,password)
-     if(result.status==0){//登录成功
+     if(result.status===0){//登录成功
        
        //提示成功信息
        message.success('登录成功')
@@ -43,11 +43,9 @@ export default class Login extends Component {
        memoryUtils.user = user
        storageUtils.saveUser(user) //保存在内存中
        this.props.history.replace('/') //保存在local中
-       console.log()
        console.log(' memoryUtils.user',memoryUtils.user);
      }else{//登录失败
        //提示失败信息
-       console.log('result',result)
        message.error(result.msg)
      }
     
@@ -82,7 +80,6 @@ export default class Login extends Component {
                 name="normal_login"
                 className="login-form"
                 onFinish={this.onFinish}
-                onFinishFailed={this.onFinishFailed}
                 initialValues={{
                   username:'admin',
                   password:''
@@ -112,7 +109,7 @@ export default class Login extends Component {
                           }else if(value.length<4){
                             return Promise.reject('密码不能小于4位');
                           }else if(value.length>12){
-                            return Promise.reject('密码不能大于12位')
+                         return Promise.reject('密码不能大于12位')
                           }else if(!(/^[a-zA-z0-9]+$/.test(value))){
                             return Promise.reject('密码为输入字母、数字或下划线')
                           }else{
