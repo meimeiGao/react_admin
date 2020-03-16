@@ -51,8 +51,8 @@ export const reqCategorys = (parentId) => ajax(BASE + category_list, {parentId})
 export const reqAddCategory = (parentId, categoryName) => ajax(BASE + add_category, {parentId, categoryName}, "POST")
 
 //修改分类   参数传一个分类对象,对象必须包含parentId,categoryName 这两个属性,然后解构出来
-export const reqUpdateCategory = ({parentId, categoryName}) => ajax(BASE + update_category, {
-  parentId,
+export const reqUpdateCategory = ({categoryId, categoryName}) => ajax(BASE + update_category, {
+  categoryId,
   categoryName
 }, "POST")
 
