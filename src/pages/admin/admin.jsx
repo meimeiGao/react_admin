@@ -9,7 +9,21 @@ import './admin.less'
  */
 
 
-import LeftNav from '../../components/left-nav'
+import loadable from '../../utils/loadable'
+const LeftNav = loadable(()=>import('../../components/left-nav'))
+const MyHeader = loadable(()=>import('../../components/header'))
+const Home = loadable(()=>import('../home/home'))
+const Category = loadable(()=>import('../category/category'))
+const Product = loadable(()=>import('../product/product'))
+const User = loadable(()=>import('../user/user'))
+const Role = loadable(()=>import('../role/role'))
+const Bar = loadable(()=>import('../charts/bar'))
+const Line = loadable(()=>import('../charts/line'))
+const Pie = loadable(()=>import('../charts/pie'))
+
+
+
+/*import LeftNav from '../../components/left-nav'
 import MyHeader from '../../components/header'
 import Home from '../home/home'
 import Category from '../category/category'
@@ -18,7 +32,7 @@ import User from '../user/user'
 import Role from '../role/role'
 import Bar from '../charts/bar'
 import Line from '../charts/line'
-import Pie from '../charts/pie'
+import Pie from '../charts/pie'*/
 
 const { Header, Footer, Sider, Content } = Layout;
 export default class Admin extends Component{
@@ -40,14 +54,14 @@ export default class Admin extends Component{
           </Header>
           <Content className='content-main'>
             <Switch>
-              <Route path='/home' component={Home}></Route>
-              <Route path='/category' component={Category}></Route>
-              <Route path='/product' component={Product}></Route>
-              <Route path='/user' component={User}></Route>
-              <Route path='/role' component={Role}></Route>
-              <Route path='/charts/bar' component={Bar}></Route>
-              <Route path='/charts/line' component={Line}></Route>
-              <Route path='/charts/pie' component={Pie}></Route>
+              <Route path='/home' component={Home} />
+              <Route path='/category' component={Category}/>
+              <Route path='/product' component={Product} />
+              <Route path='/user' component={User} />
+              <Route path='/role' component={Role} />
+              <Route path='/charts/bar' component={Bar} />
+              <Route path='/charts/line' component={Line}/>
+              <Route path='/charts/pie' component={Pie}/>
               <Redirect to='/home' />
             </Switch>
           </Content>

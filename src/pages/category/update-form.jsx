@@ -14,23 +14,41 @@ export default class UpdateForm extends Component{
   
   static propTypes = {
     categoryName:PropTypes.string.isRequired,
-    setForm:PropTypes.func.isRequired
+    getForm:PropTypes.func.isRequired,
   }
   
+  initUpdateCategory=(categoryName)=>{
+    if(this.formRef && this.formRef.current){
+      this.formRef.current.setFieldsValue({
+        categoryName:categoryName
+      });
+    }
+  }
   componentWillMount() {
-    this.props.setForm(this.formRef)
+    this.props.getForm(this.formRef)
   }
   
   componentDidMount() {
+    this.initUpdateCategory(this.props.categoryName)
+  }
   
+  componentWillUnmount() {
+
   }
   
   render(){
-   
-    let categoryName = this.props.categoryName
     return(
-      <Form initialValues={{categoryName}} ref={this.formRef}>
-        <Item label="分类名称" name='categoryName'>
+      <Form name='updateForm' ref={this.formRef}>
+        <Item
+          label="分类名称"
+          name='categoryName'
+          rules={[
+            {
+              required: true,
+              message: '请输入分类名称',
+            },
+            {max:12, message: '最大长度为12',}
+          ]}>
           <Input placeholder='请输入分类名称'/>
         </Item>
       </Form>

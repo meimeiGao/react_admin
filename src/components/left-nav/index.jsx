@@ -67,9 +67,10 @@ class LeftNav extends Component{
         ))
       }else{
         //查找一个与当前请求路径匹配的子Item
-        const cItem = item.children.find(cItem=>cItem.key===path)
+        const cItem = item.children.find(cItem=>path.indexOf(cItem.key)===0)
         if(cItem){
           this.openKey = item.key
+          // this.selectKey =cItem.key
         }
         console.log(item)
         pre.push((
@@ -96,13 +97,21 @@ class LeftNav extends Component{
    */
   componentWillMount() {
     this.menuNodes = this.getMenuNodes(menuList)
+
   }
+	
+
+	
+	render(){
   
-  render(){
     //得到当前请求的路由路径
-    const path = this.props.location.pathname
+    let path = this.props.location.pathname
+    // let path = this.selectKey
     //需要打开菜单项的key
     const openKey = this.openKey
+    // if(path.indexOf(openKey)===0){
+    //   path = openKey
+    // }
     return(
       <div className='left-nav'>
         <Link to='/' className='left-nav-header'>
