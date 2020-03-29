@@ -11,8 +11,6 @@ import json from 'jsonp'
 const BASE = ''
 //登录
 const login_url = '/login'
-//添加用户
-const add_user_url = '/manage/user/add'
 //获取一级/二级分类
 const category_list = '/manage/category/list'
 //添加分类
@@ -35,8 +33,17 @@ const delete_img = '/manage/img/delete'
 const roles_list = 'manage/role/list'
 //添加角色
 const add_role = '/manage/role/add'
-//
+//修改用户
 const update_role = '/manage/role/update'
+//用户列表
+const user_list = '/manage/user/list'
+//删除用户
+const delete_user = '/manage/user/delete'
+//添加用户
+const add_user = '/manage/user/add'
+//修改用户
+const update_user = '/manage/user/update'
+
 
 //方法一  (统一暴露)
 /*export default {
@@ -60,8 +67,8 @@ const update_role = '/manage/role/update'
 //登录
 export const reqLogin = (username, password) => ajax(BASE + login_url, {username, password}, 'POST')
 
-//添加用户
-export const reqAddUser = (user) => ajax(BASE + add_user_url, user, 'POST')
+//添加/修改用户
+export const reqAddOrUpdateUser = (user) => ajax(BASE +(user._id?update_user:add_user), user, 'POST')
 
 //获取一级/二级分类   不写类型默认是GET请求
 export const reqCategorys = (parentId) => ajax(BASE + category_list, {parentId})
@@ -108,6 +115,12 @@ export const reqAddRole = (roleName) => ajax(BASE + add_role, {roleName}, "POST"
 
 //修改角色
 export const reqUpdateRole = (role) => ajax(BASE + update_role, role, "POST")
+
+//用户列表
+export const reqUsers = ()=>ajax(BASE+user_list)
+
+//删除用户
+export const reqDeleteUser =(user)=>ajax(BASE+delete_user,{user},'POST')
 
 
 //json请求的接口请求函数
