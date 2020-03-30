@@ -10,12 +10,37 @@ import {
 import './index.less'
 import logo from "../../assets/images/logo.png";
 import menuList from "../../config/menuConfig"
+import memoryUtils from '../../utils/memoryUtils'
 
 
 const { SubMenu } = Menu;
 
 
 class LeftNav extends Component{
+  
+  //判断当前用户是否包含item权限
+  hasAuth = (item)=>{
+    /*
+      1.如果当前用户是admin是则为true
+      2.如果当前key包含isPublic 是则为true
+      3.当用户的menus里是否包含当前key.是则为true
+          -- 是则为true
+          -- 否
+            如果menus 包含item 的children 的key 则为true
+     */
+    
+    const key = item.key
+    const menus = memoryUtils.user.role.menus
+    const username = memoryUtils.user.username
+    
+    if(item.isPublic || username==='admin' || menus.indexOf(key)!==-1){
+      return true
+    }else if(item.children){ //
+      return !!item.children.find(child=>menus.indexOf(child.key)!==-1)
+    }
+    
+    return false
+  }
   /*
     根据menu的数据数组生成对应的标签数组
     使用map()+递归调用
@@ -56,36 +81,39 @@ class LeftNav extends Component{
     const path = this.props.location.pathname
     return menuList.reduce((pre,item)=>{
       //向pre添加<Menu.Item>
-      if(!item.children){
-        pre.push( (
-          <Menu.Item key={item.key}>
-            <Link to={item.key}>
-              <PieChartOutlined />
-              <span>{item.title}</span>
-            </Link>
-          </Menu.Item>
-        ))
-      }else{
-        //查找一个与当前请求路径匹配的子Item
-        const cItem = item.children.find(cItem=>path.indexOf(cItem.key)===0)
-        if(cItem){
-          this.openKey = item.key
-          // this.selectKey =cItem.key
-        }
-        console.log(item)
-        pre.push((
-          <SubMenu
-            key={item.key}
-            title={
-              <span>
+      if(this.hasAuth(item)){
+      // if(true){
+        if(!item.children){
+          pre.push( (
+            <Menu.Item key={item.key}>
+              <Link to={item.key}>
+                <PieChartOutlined />
+                <span>{item.title}</span>
+              </Link>
+            </Menu.Item>
+          ))
+        }else{
+          //查找一个与当前请求路径匹配的子Item
+          const cItem = item.children.find(cItem=>path.indexOf(cItem.key)===0)
+          if(cItem){
+            this.openKey = item.key
+            // this.selectKey =cItem.key
+          }
+          console.log(item)
+          pre.push((
+            <SubMenu
+              key={item.key}
+              title={
+                <span>
                 <DesktopOutlined />
                 <span>{item.title}</span>
               </span>
-            }
-          >
-            {this.getMenuNodes(item.children)}
-          </SubMenu>
-        ))
+              }
+            >
+              {this.getMenuNodes(item.children)}
+            </SubMenu>
+          ))
+        }
       }
       return pre
     },[])

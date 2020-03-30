@@ -20,13 +20,26 @@ export default class UserForm extends Component{
     roles:PropTypes.array.isRequired,
     user:PropTypes.object
   }
-
-  shouldComponentUpdate(nextProps, nextState){
-    debugger
-    if(nextProps.user._id){
-      this.form.current.setFieldsValue(nextProps.user)
+  
+  //自定义验证用户名
+  validtaUserName = (rule, value)=>{
+    if(!value){
+      return Promise.reject('请输入用户名')
+    }else{
+      return Promise.resolve()
     }
+  }
 
+  //自定义验证密码
+  validtaPassword =(rule, value)=>{
+    if(!value){
+      return Promise.reject('请输入密码')
+    }else{
+      return Promise.resolve()
+    }
+  }
+  shouldComponentUpdate(nextProps, nextState){
+    this.form.current.setFieldsValue(nextProps.user)
     return true
   }
   componentWillMount() {
@@ -34,26 +47,39 @@ export default class UserForm extends Component{
   }
 
   componentDidMount() {
-    debugger
     this.form.current.setFieldsValue(this.props.user)
   }
 
   render(){
     const {roles} = this.props
-    const aa = this.props
-    debugger
+    const {user} = this.props
     const layout = {
       labelCol: { span: 4 },
       wrapperCol: { span: 18 },
     }
     return(
-      <Form {...layout} ref={this.form} >
-        <Item label='用户名' name='username'>
+      <Form
+        {...layout}
+        ref={this.form}
+      >
+        <Item
+          label='用户名'
+          name='username'
+          rules={[{ required: true,validator:this.validtaUserName }]}
+        >
           <Input placeholder='请输入用户名'/>
         </Item>
-        <Item label='密码' name='password'>
-          <Input.Password placeholder='请输入密码'/>
-        </Item>
+        {
+          user._id?null:(
+            <Item
+              label='密码'
+              name='password'
+              rules={[{ required: true,validator:this.validtaPassword }]}
+            >
+              <Input.Password placeholder='请输入密码'/>
+            </Item>
+          )
+        }
         <Item label='手机号' name='phone'>
           <Input placeholder='请输入手机号'/>
         </Item>

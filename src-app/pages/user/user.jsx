@@ -8,6 +8,7 @@ import {
 } from 'antd'
 import LinkButton from '../../components/link-button'
 import {reqUsers, reqDeleteUser, reqAddOrUpdateUser} from '../../api'
+import {formatPromise} from '../../utils/promiseUtils'
 import UserForm from './user-form'
 import {
   del_SUCCESS_MESSAGE,
@@ -16,6 +17,10 @@ import {
 
 
 const {confirm} = Modal;
+
+
+
+
 
 
 export default class User extends Component {
@@ -30,6 +35,10 @@ export default class User extends Component {
   showAdd = () => {
     this.user = {}
     this.setState({isShow: true})
+		if(this.form && this.form.current){
+			this.form.current.resetFields()
+		}
+	
   }
 
   //显示修改用户界面
@@ -42,26 +51,34 @@ export default class User extends Component {
 
   //关闭添加/修改用户框
   handleCancel = () => {
+		this.user = {}
     this.setState({isShow: false})
-    this.form.current.resetFields()
+    // this.form.current.resetFields()
   }
 
   //添加/修改用户
   addOrUpdate = async () => {
+		const validateResult = formatPromise(this.form.current.validateFields())
     //搜集对象
     const user = this.form.current.getFieldsValue()
     //发请求
     if(this.user && this.user._id){
       user._id = this.user._id
     }
-    const reslut = await reqAddOrUpdateUser(user)
-    if (reslut.status === 0) {
-      this.setState({isShow: false})
-      this.form.current.resetFields()
-      //更新列表
-      this.getUsers()
-    }
+    if(!validateResult.errorFields){
+			const reslut = await reqAddOrUpdateUser(user)
+			if (reslut.status === 0) {
+				this.setState({isShow: false})
+				this.user = {}
+				// this.form.current.resetFields()
+				//更新列表
+				this.getUsers()
+			}
+		}
+  
   }
+  
+  
 
   //删除用户
   deleterUser = (user) => {
