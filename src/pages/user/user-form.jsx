@@ -22,7 +22,6 @@ export default class UserForm extends Component{
   }
 
   shouldComponentUpdate(nextProps, nextState){
-    debugger
     if(nextProps.user._id){
       this.form.current.setFieldsValue(nextProps.user)
     }
@@ -34,14 +33,11 @@ export default class UserForm extends Component{
   }
 
   componentDidMount() {
-    debugger
     this.form.current.setFieldsValue(this.props.user)
   }
 
   render(){
     const {roles} = this.props
-    const aa = this.props
-    debugger
     const layout = {
       labelCol: { span: 4 },
       wrapperCol: { span: 18 },
