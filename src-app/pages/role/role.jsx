@@ -17,11 +17,12 @@ import {
   ADD_SUCCESS_MESSAGE,
   REQ_ERROR_MESSAGE,
   PAGE_SIZE,
-  ADD_ERROR_MESSAGE
+  ADD_ERROR_MESSAGE,
+  UPDATE_SUCCESS_MESSAGE
 } from "../../utils/constants";
+import storageUtils from "../../utils/storageUtils";
 
 export default class Role extends Component{
-  
   
   constructor(prpos){
     super(prpos)
@@ -46,8 +47,16 @@ export default class Role extends Component{
     const result = await reqUpdateRole(role)
     if(result.status ===0){
       this.setState({isShowAuth:false})
-      message.success(ADD_SUCCESS_MESSAGE)
-      this.getRoles()
+      if(role._id===memoryUtils.user.role_id){
+        memoryUtils.user = {}
+        storageUtils.removeUser()
+        this.props.history.replace('/login')
+        message.success('添加成功,请重新登录')
+      }else{
+        this.getRoles()
+        message.success(UPDATE_SUCCESS_MESSAGE)
+      }
+      
     }else{
       message.error(ADD_ERROR_MESSAGE)
     }
