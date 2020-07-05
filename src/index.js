@@ -10,6 +10,9 @@ import storageUtils from './utils/storageUtils'
 
 //读取local中保存user,保存到内存中
 
+
+console.log(process.env)
+
 const user = storageUtils.getUser()
 memoryUtils.user = user
 
